@@ -3,9 +3,9 @@ import { UserService } from '../services/userService';
 import { UserRepository } from '../repositories/userRepository';
 
 export class UserController {
-  async create(req: Request, res: Response): Promise<Response> {
+  async create(req: Request, res: Response): Promise<void> {
     try {
-      const { name, email, password } = req.body;
+      const { name, email, password: userPassword } = req.body;
 
       const userRepository = new UserRepository();
       const userService = new UserService(userRepository);
@@ -13,36 +13,46 @@ export class UserController {
       const user = await userService.create({
         name,
         email,
-        password_raw: password,
+        password_raw: userPassword,
       });
 
-      const { password: _, ...userWithoutPassword } = user;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password: _password, ...userWithoutPassword } = user;
 
-      return res.status(201).json(userWithoutPassword);
+      res.status(201).json(userWithoutPassword);
     } catch (error) {
       if (error instanceof Error) {
         if (error.message.includes('e-mail já está em uso')) {
-          return res.status(409).json({ message: error.message });
+          res.status(409).json({ message: error.message });
+          return;
         }
       }
-      return res.status(500).json({ message: 'Erro interno do servidor' });
+      res.status(500).json({ message: 'Erro interno do servidor' });
     }
   }
 
-  async getProfile(req: Request, res: Response) {
+  async getProfile(req: Request, res: Response): Promise<void> {
     try {
       const userRepository = new UserRepository();
+
+      if (!req.userId) {
+        res.status(401).json({ message: 'Token inválido.' });
+        return;
+      }
+
       const user = await userRepository.findById(req.userId);
 
       if (!user) {
-        return res.status(404).json({ message: 'Usuário não encontrado.' });
+        res.status(404).json({ message: 'Usuário não encontrado.' });
+        return;
       }
 
-      const { password: _, ...userWithoutPassword } = user;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password: _userPassword, ...userWithoutPassword } = user;
 
-      return res.status(200).json(userWithoutPassword);
-    } catch (error) {
-      return res.status(500).json({ message: 'Erro interno do servidor.' });
+      res.status(200).json(userWithoutPassword);
+    } catch {
+      res.status(500).json({ message: 'Erro interno do servidor.' });
     }
   }
 }

@@ -25,10 +25,10 @@ export class AuthService {
       {
         name: user.name,
         email: user.email,
+        sub: user.id,
       },
       process.env.JWT_SECRET as string,
       {
-        subject: user.id,
         expiresIn: '1d',
       }
     );

@@ -3,7 +3,7 @@ import { AuthService } from '../services/authService';
 import { UserRepository } from '../repositories/userRepository';
 
 export class AuthController {
-  async authenticate(req: Request, res: Response) {
+  async authenticate(req: Request, res: Response): Promise<void> {
     try {
       const { email, password } = req.body;
 
@@ -23,9 +23,9 @@ export class AuthController {
         path: '/',
       });
 
-      return res.status(200).json(user);
-    } catch (_error) {
-      return res.status(401).json({ message: 'Credenciais inválidas.' });
+      res.status(200).json(user);
+    } catch {
+      res.status(401).json({ message: 'Credenciais inválidas.' });
     }
   }
 }

@@ -1,15 +1,17 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import { TokenPayload } from '../custom';
 
 export function authMiddleware(
   req: Request,
   res: Response,
   next: NextFunction
-) {
+): void {
   const { token } = req.cookies;
 
   if (!token) {
-    return res.status(401).json({ message: 'Token não fornecido.' });
+    res.status(401).json({ message: 'Token não fornecido.' });
+    return;
   }
 
   try {
@@ -18,8 +20,8 @@ export function authMiddleware(
 
     req.userId = sub;
 
-    return next();
-  } catch (error) {
-    return res.status(401).json({ message: 'Token inválido.' });
+    next();
+  } catch {
+    res.status(401).json({ message: 'Token inválido.' });
   }
 }
