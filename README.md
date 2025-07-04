@@ -51,7 +51,7 @@ Primeiro, configure e inicie o servidor do backend.
 
 2.  **Navegue até a pasta do backend:**
     ```bash
-    cd backend-desafio
+    cd backend
     ```
 
 3.  **Instale as dependências:**
@@ -81,7 +81,7 @@ Com o backend rodando, configure e inicie a aplicação React.
 
 1.  **Abra um novo terminal** e navegue até a pasta do frontend:
     ```bash
-    cd frontend-desafio
+    cd frontend
     ```
 
 2.  **Instale as dependências:**
@@ -101,7 +101,7 @@ Com o backend rodando, configure e inicie a aplicação React.
 
 A estrutura de pastas foi organizada para separar as responsabilidades.
 
-### Backend (`/backend-desafio/src`)
+### Backend (`/backend/src`)
 src/
 
 ├── controllers/    # Recebe as requisições HTTP e retorna as respostas.
@@ -115,7 +115,7 @@ src/
 └── ...
 
 
-### Frontend (`/frontend-desafio/src`)
+### Frontend (`/frontend/src`)
 src/
 
 ├── components/     # Componentes React reutilizáveis.
