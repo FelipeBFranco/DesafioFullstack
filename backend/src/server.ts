@@ -15,6 +15,8 @@ app.use(
       'http://localhost',
       'http://franco.seshatrpg.com.br',
       'https://franco.seshatrpg.com.br',
+      'http://franco.seshatrpg.com.br:80',
+      'https://franco.seshatrpg.com.br:443',
       ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : []), // Permite configurar via variável de ambiente
     ],
     credentials: true,

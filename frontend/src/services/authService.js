@@ -2,15 +2,20 @@ import axios from 'axios';
 
 // Determina a URL base da API baseada no ambiente
 const getAPIBaseURL = () => {
-  if (process.env.NODE_ENV === 'production') {
-    // Em produção, usa o mesmo domínio do frontend
-    return `${window.location.protocol}//${window.location.host}/api`;
+  // Se estiver rodando em desenvolvimento (localhost:3000)
+  if (window.location.hostname === 'localhost' && window.location.port === '3000') {
+    return process.env.REACT_APP_API_URL || 'http://localhost:3333/api';
   }
-  // Em desenvolvimento, usa localhost
-  return process.env.REACT_APP_API_URL || 'http://localhost:3333/api';
+  
+  // Se estiver em produção, usa o mesmo host/domínio atual
+  return `${window.location.protocol}//${window.location.host}/api`;
 };
 
 const API_BASE_URL = getAPIBaseURL();
+
+// Debug temporário - remover depois
+console.log('🔧 API_BASE_URL configurada para:', API_BASE_URL);
+console.log('🌐 window.location:', window.location.href);
 
 export const authService = {
   async login(email, password) {
