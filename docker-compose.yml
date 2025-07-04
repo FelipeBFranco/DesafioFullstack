@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  # Serviço do Backend
+# Serviço do Backend
   backend:
     build:
       context: ./backend
@@ -11,9 +11,8 @@ services:
     ports:
       - "3333:3333"
     environment:
-      # Use as mesmas variáveis do seu arquivo .env do backend
       DATABASE_URL: "postgresql://user:password@postgres:5432/mydatabase?schema=public"
-      JWT_SECRET: "your-super-secret-jwt-key-here" # Use um segredo forte
+      JWT_SECRET: "your-super-secret-jwt-key-here"
     depends_on:
       - postgres
     networks:

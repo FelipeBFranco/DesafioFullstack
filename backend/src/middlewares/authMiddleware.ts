@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { TokenPayload } from '../custom';
+import { TokenPayload } from '../custom.js';
 
 export function authMiddleware(
   req: Request,

@@ -1,5 +1,5 @@
 import { User } from '@prisma/client';
-import { UserRepository } from '../repositories/userRepository';
+import { UserRepository } from '../repositories/userRepository.js';
 import { hash } from 'bcrypt';
 
 interface CreateUserRequest {

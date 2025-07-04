@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { UserService } from '../services/userService';
-import { UserRepository } from '../repositories/userRepository';
+import { UserService } from '../services/userService.js';
+import { UserRepository } from '../repositories/userRepository.js';
 
 export class UserController {
   async create(req: Request, res: Response): Promise<void> {

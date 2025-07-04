@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { AuthService } from '../services/authService';
-import { UserRepository } from '../repositories/userRepository';
+import { AuthService } from '../services/authService.js';
+import { UserRepository } from '../repositories/userRepository.js';
 
 export class AuthController {
   async authenticate(req: Request, res: Response): Promise<void> {

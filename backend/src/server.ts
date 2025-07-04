@@ -8,7 +8,11 @@ const PORT = 3333;
 
 app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: [
+      'http://localhost:3000',
+      'http://localhost:80',
+      'http://localhost',
+    ],
     credentials: true,
   })
 );
