@@ -117,11 +117,17 @@ src/
 
 ### Frontend (`/frontend-desafio/src`)
 src/
+
 ├── components/     # Componentes React reutilizáveis.
+
 ├── context/        # Contexto de autenticação global.
+
 ├── pages/          # As telas principais da aplicação (Login, Register, etc.).
+
 ├── routes/         # Configuração do roteamento.
+
 ├── services/       # Serviços para comunicação com a API.
+
 └── ...
 
 
