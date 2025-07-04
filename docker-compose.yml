@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  # Serviço do Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: desafio-backend
+    restart: always
+    ports:
+      - "3333:3333"
+    environment:
+      # Use as mesmas variáveis do seu arquivo .env do backend
+      DATABASE_URL: "postgresql://user:password@postgres:5432/mydatabase?schema=public"
+      JWT_SECRET: "your-super-secret-jwt-key-here" # Use um segredo forte
+    depends_on:
+      - postgres
+    networks:
+      - desafio-network
+
+  # Serviço do Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: desafio-frontend
+    restart: always
+    ports:
+      - "80:80" # Mapeia a porta 80 do container para a 80 da VM
+    depends_on:
+      - backend
+    networks:
+      - desafio-network
+
+  # Serviço do Banco de Dados PostgreSQL
+  postgres:
+    image: postgres:14-alpine
+    container_name: desafio-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - desafio-network
+
+# Define as redes e volumes
+networks:
+  desafio-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
