@@ -1,65 +1,114 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
-import { loginRequest, registerRequest } from '../services/authService.js';
-import api from '../services/api';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { authService } from '../services/authService.js';
 
-const AuthContext = createContext({});
+const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function loadStorageData() {
-      const storagedUser = localStorage.getItem('@App:user');
-      const storagedToken = localStorage.getItem('@App:token');
-
-      if (storagedUser && storagedToken) {
-        setUser(JSON.parse(storagedUser));
-        api.defaults.headers.Authorization = `Bearer ${storagedToken}`;
-      }
-      setLoading(false);
-    }
-    loadStorageData();
+    checkAuthStatus();
   }, []);
 
+  const checkAuthStatus = async () => {
+    try {
+      setLoading(true);
+      console.log('🔍 Verificando status de autenticação...');
+      const userData = await authService.getCurrentUser();
+      console.log('✅ Usuário autenticado:', userData);
+      setUser(userData);
+    } catch (error) {
+      console.log('❌ Usuário não autenticado:', error.message);
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const signIn = async (email, password) => {
-  try {
-    const userData = await loginRequest(email, password);
-    setUser(userData);
-  } catch (error) {
-    console.error("Erro no serviço de login:", error);
-    throw new Error('Email ou senha inválidos.');
-  }
-};
+    try {
+      console.log('🔐 Tentando fazer login...');
+      const response = await authService.login(email, password);
+      console.log('✅ Login bem-sucedido:', response);
+      
+      // O backend retorna os dados do usuário diretamente, não dentro de uma propriedade 'user'
+      if (response && response.id && response.email && response.name) {
+        // Criar objeto de usuário limpo (sem a senha)
+        const userData = {
+          id: response.id,
+          name: response.name,
+          email: response.email,
+          createdAt: response.createdAt,
+          updatedAt: response.updatedAt
+        };
+        
+        setUser(userData);
+        console.log('👤 Usuário definido no estado:', userData);
+        return response;
+      } else {
+        console.error('❌ Resposta inválida do backend:', response);
+        throw new Error('Resposta do login não contém dados válidos do usuário');
+      }
+    } catch (error) {
+      console.log('❌ Erro no login:', error);
+      throw error;
+    }
+  };
 
   const signUp = async (name, email, password) => {
     try {
-      await registerRequest(name, email, password);
-      await signIn(email, password);
+      console.log('📝 Tentando fazer cadastro...');
+      const response = await authService.register(name, email, password);
+      console.log('✅ Cadastro bem-sucedido:', response);
+      
+      // Mesmo tratamento para o registro
+      if (response && response.id && response.email && response.name) {
+        const userData = {
+          id: response.id,
+          name: response.name,
+          email: response.email,
+          createdAt: response.createdAt,
+          updatedAt: response.updatedAt
+        };
+        
+        setUser(userData);
+        console.log('👤 Usuário definido no estado após cadastro:', userData);
+        return response;
+      } else {
+        throw new Error('Resposta do cadastro não contém dados válidos do usuário');
+      }
     } catch (error) {
-      console.error("Falha no cadastro", error);
-      throw new Error("Não foi possível realizar o cadastro. O e-mail já pode estar em uso.");
+      console.log('❌ Erro no cadastro:', error);
+      throw error;
     }
   };
 
-  const signOut = () => {
-    localStorage.clear();
-    setUser(null);
+  const signOut = async () => {
+    try {
+      await authService.logout();
+      setUser(null);
+    } catch (error) {
+      setUser(null);
+    }
   };
 
-  return (
-    <AuthContext.Provider
-      value={{ signed: !!user, user, loading, signIn, signOut, signUp }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
+  const value = {
+    user,
+    loading,
+    signIn,
+    signUp,
+    signOut,
+    checkAuthStatus,
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-
-
-
-export function useAuth() {
+export const useAuth = () => {
   const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
   return context;
-}
+};

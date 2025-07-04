@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import Login from '../pages/Login.js';
 import Register from '../pages/Register.js';
@@ -10,11 +10,17 @@ export default function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Rotas Públicas */}
+        <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-
-        {/* Rota Protegida */}
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
         <Route
           path="/profile"
           element={
@@ -23,6 +29,7 @@ export default function AppRoutes() {
             </PrivateRoute>
           }
         />
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>
   );

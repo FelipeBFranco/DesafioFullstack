@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "type": "module",
   "main": "index.js",
-"scripts": {
-  "dev": "tsx watch src/server.ts",
-  "build": "npx tsc",
-  "lint": "eslint src --ext .ts",
-  "lint:fix": "eslint src --ext .ts --fix"
-},
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "npx tsc",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
