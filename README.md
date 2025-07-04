@@ -103,10 +103,15 @@ A estrutura de pastas foi organizada para separar as responsabilidades.
 
 ### Backend (`/backend-desafio/src`)
 src/
+
 ├── controllers/    # Recebe as requisições HTTP e retorna as respostas.
+
 ├── middlewares/    # Funções que rodam entre a requisição e o controller (auth, validação).
+
 ├── repositories/   # Camada de acesso direto ao banco de dados (Prisma).
+
 ├── services/       # Contém a lógica de negócio da aplicação.
+
 └── ...
 
 
