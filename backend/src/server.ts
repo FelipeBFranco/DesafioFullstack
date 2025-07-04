@@ -12,6 +12,7 @@ app.use(
       'http://localhost:3000',
       'http://localhost:80',
       'http://localhost',
+      'http://franco.seshatrpg.com.br',
     ],
     credentials: true,
   })

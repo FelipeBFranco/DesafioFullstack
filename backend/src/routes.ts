@@ -21,4 +21,8 @@ router.get('/profile', authMiddleware, async (req, res) => {
   await userController.getProfile(req, res);
 });
 
+router.get('/me', authMiddleware, async (req, res) => {
+  await userController.getProfile(req, res);
+});
+
 export { router };
