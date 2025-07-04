@@ -21,6 +21,8 @@ export class UserController {
 
       res.status(201).json(userWithoutPassword);
     } catch (error) {
+      console.error('Erro ao criar usuário:', error);
+      
       if (error instanceof Error) {
         if (error.message.includes('e-mail já está em uso')) {
           res.status(409).json({ message: error.message });

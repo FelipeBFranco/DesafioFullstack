@@ -1,7 +1,17 @@
 import axios from 'axios';
 
+// Determina a URL base da API baseada no ambiente
+const getBaseURL = () => {
+  if (process.env.NODE_ENV === 'production') {
+    // Em produção, usa o mesmo domínio do frontend
+    return `${window.location.protocol}//${window.location.host}/api`;
+  }
+  // Em desenvolvimento, usa localhost
+  return process.env.REACT_APP_API_URL || 'http://localhost:3333/api';
+};
+
 const api = axios.create({
-  baseURL: 'http://localhost:3333/api',
+  baseURL: getBaseURL(),
   withCredentials: true,
 });
 
