@@ -46,7 +46,7 @@ Primeiro, configure e inicie o servidor do backend.
 
 1.  **Clone o repositório** (caso ainda não tenha feito):
     ```bash
-    git clone <URL_DO_SEU_REPOSITORIO>
+    git clone https://github.com/FelipeBFranco/DesafioFullstack.git
     ```
 
 2.  **Navegue até a pasta do backend:**
